@@ -1,0 +1,108 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f5;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+  text-align: center;
+}
+
+#games-list {
+  width: 100%;
+  max-width: 500px;
+  list-style-type: none;
+  padding: 0;
+}
+
+#games-list li {
+  padding: 10px;
+  background-color: #fff;
+  margin: 5px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.game-status {
+  font-size: 0.9em;
+  color: #888;
+}
+
+#games-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#input-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#game-name {
+  padding: 10px;
+  font-size: 16px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#add-game-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#add-game-btn:hover {
+  background-color: #0056b3;
+}
+
+
+
+.game-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.status-toggle {
+  margin-right: 10px; /* Space between checkbox and name */
+  cursor: pointer;
+}
+
+.game-item span {
+  flex-grow: 1; /* Take up remaining space */
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #ff0000;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.delete-button:hover {
+  color: #cc0000;
+}
+
+.delete-button svg {
+  width: 16px;
+  height: 16px;
+}
