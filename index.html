@@ -11,18 +11,46 @@
 <body>
   <h1>BabyFoot Manager</h1>
 
+  <div id="main-container">
+    <!-- Games Section -->
+    <div id="games-section">
+      <div id="input-container">
+        <form>
+          <input id="game-name" type="text" placeholder="Enter game name" />
+          <button id="add-game-btn">Add Game</button>
+        </form>
+      </div>
 
-  <div id="input-container">
-    <form>
-      <input id="game-name" type="text" placeholder="Enter game name" />
-      <button id="add-game-btn" >Add Game</button>
-    </form>
-  </div>
+      <div id="games-container">
+        <ul id="games-list">
+          <!-- Games will be dynamically added here -->
+        </ul>
+      </div>
+    </div>
 
-  <div id="games-container">
-    <ul id="games-list">
-      <!-- Games will be dynamically added here -->
-    </ul>
+    <!-- Chat Section -->
+    <div id="chat-section">
+      <!-- Chat Header -->
+      <div id="chat-header">
+        <form>
+          <input id="user-name" type="text" placeholder="Enter your name" />
+          <button id="set-name-btn">Set Name</button>
+        </form>
+      </div>
+
+      <!-- Chat History -->
+      <div id="chat-history">
+        <!-- Chat messages will be dynamically added here -->
+      </div>
+
+      <!-- Chat Input -->
+      <div id="chat-input">
+        <form id="chat-form">
+          <input id="chat-message" type="text" placeholder="Type your message" />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>

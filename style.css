@@ -1,13 +1,26 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f0f5;
-  margin: 0;
-  padding: 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
   color: #333;
   text-align: center;
+  margin: 20px 0;
+}
+
+.list-item,
+#games-list li {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 #games-list {
@@ -18,14 +31,11 @@ h1 {
 }
 
 #games-list li {
-  padding: 10px;
   background-color: #fff;
-  margin: 5px 0;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.game-item {
+  background-color: #f9f9f9;
 }
 
 .game-status {
@@ -33,61 +43,13 @@ h1 {
   color: #888;
 }
 
-#games-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#input-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-#game-name {
-  padding: 10px;
-  font-size: 16px;
-  width: 250px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#add-game-btn {
-  padding: 10px 20px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-#add-game-btn:hover {
-  background-color: #0056b3;
-}
-
-
-
-.game-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  margin: 5px 0;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
 .status-toggle {
-  margin-right: 10px; /* Space between checkbox and name */
+  margin-right: 10px;
   cursor: pointer;
 }
 
 .game-item span {
-  flex-grow: 1; /* Take up remaining space */
+  flex-grow: 1;
 }
 
 .delete-button {
@@ -105,4 +67,121 @@ h1 {
 .delete-button svg {
   width: 16px;
   height: 16px;
+}
+
+/* Input and Button Styles (Used by both game input and chat input) */
+#game-name,
+#user-name,
+#chat-message {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#game-name,
+#user-name {
+  max-width: 100%;
+}
+
+#game-name {
+  width: 250px;
+}
+
+.action-button,
+#add-game-btn,
+#chat-form button,
+#set-name-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#add-game-btn {
+  margin-left: 10px;
+}
+
+.action-button:hover,
+#add-game-btn:hover,
+#chat-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Container Styles */
+#games-container,
+#input-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#main-container {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 100px);
+}
+
+#games-section {
+  flex: 7;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+#chat-section {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Media Query for smaller screens (e.g., phones) */
+@media (max-width: 768px) {
+
+  /* Adjust 768px as needed */
+  #main-container {
+    flex-direction: column;
+    /* Stack the sections vertically */
+    height: auto;
+    /* Allow content to determine height */
+  }
+
+  #games-section {
+    flex: 1;
+    /* Take up available space */
+    border-right: none;
+    /* Remove right border */
+    border-bottom: 1px solid #ccc;
+    /* Add bottom border to separate sections */
+  }
+
+  #chat-section {
+    flex: 1;
+    /* Take up available space */
+  }
+}
+
+#chat-header {
+  margin-bottom: 10px;
+}
+
+#chat-history {
+  min-height: 300px;
+  max-height: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #f9f9f9;
+  border-radius: 5px;
+}
+
+#chat-form {
+  display: flex;
+  gap: 10px;
 }
