@@ -6,8 +6,9 @@ const userNameInput = document.getElementById('user-name');
 const chatHistory = document.getElementById('chat-history');
 const chatForm = document.getElementById('chat-form');
 const chatMessageInput = document.getElementById('chat-message');
-let currentUserName = null; // Tracks the current user's name securely
-let currentUserId = null; // Unique identifier for the current user
+let unfinishedGameCount = 0;
+let currentUserName = null;
+let currentUserId = null;
 
 
 // Display a game in the list
@@ -36,11 +37,21 @@ function displayGame({ id, name, is_finished }) {
 	gamesList.appendChild(li);
 }
 
+function updateUnfinishedCounter() {
+	const unfinishedGames = Array.from(document.querySelectorAll('.game-item')).filter(
+		(gameItem) => !gameItem.classList.contains('finished')
+	).length;
+
+	document.getElementById('unfinished-counter').textContent = `Unfinished Games: ${unfinishedGames}`;
+}
+
 // Update the styling for a game item
 function updateGameStyles(li, isFinished) {
+	li.classList.toggle('finished', isFinished); // Add/remove 'finished' class
 	li.style.color = isFinished ? 'red' : 'black';
 	li.style.textDecoration = isFinished ? 'line-through' : 'none';
 }
+
 
 // Update game status or other properties
 function updateGame(id, updates) {
@@ -86,7 +97,7 @@ function sendChatMessage() {
 	}
 
 	// Send message to WebSocket server
-	socket.send(JSON.stringify({ type: 'chatMessage', name, message, id:  currentUserId}));
+	socket.send(JSON.stringify({ type: 'chatMessage', name, message, id: currentUserId }));
 	chatMessageInput.value = ''; // Clear the input field
 }
 
@@ -98,15 +109,21 @@ socket.onmessage = ({ data }) => {
 	switch (type) {
 		case 'gameCreated':
 			displayGame(parsedData.game);
+			updateUnfinishedCounter(); // Recalculate the counter
 			break;
-		case 'gameUpdated':
+		case 'gameUpdated': {
 			const gameItem = document.querySelector(`li[data-id="${parsedData.game.id}"]`);
 			if (gameItem) {
 				updateGameStyles(gameItem, parsedData.game.is_finished);
+				updateUnfinishedCounter(); // Recalculate the counter
+				gameItem.querySelector('.status-toggle').checked = parsedData.game.is_finished;
 			}
 			break;
+		}
 		case 'gameDeleted':
-			document.querySelector(`li[data-id="${parsedData.id}"]`)?.remove();
+			const gameItem = document.querySelector(`li[data-id="${parsedData.id}"]`);
+			gameItem?.remove();
+			updateUnfinishedCounter(); // Recalculate the counter
 			break;
 		case 'chatMessage':
 			displayChatMessage(parsedData);
@@ -156,9 +173,13 @@ document.getElementById('set-name-btn').addEventListener('click', () => {
 
 // Fetch existing games on page load
 fetch('http://localhost:3000/games')
-	.then((response) => response.ok ? response.json() : Promise.reject('Failed to fetch games'))
-	.then((games) => games.forEach(displayGame))
-	.catch((error) => console.error('Error fetching games:', error));
+	.then((res) => (res.ok ? res.json() : Promise.reject('Failed to fetch games')))
+	.then((games) => {
+		games.forEach(displayGame);
+		updateUnfinishedCounter(); // Update the counter after displaying all games
+	})
+	.catch((err) => console.error('Error fetching games:', err));
+
 
 
 
