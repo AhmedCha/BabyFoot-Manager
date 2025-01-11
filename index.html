@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
   <meta charset="UTF-8">
@@ -9,53 +9,53 @@
 </head>
 
 <body>
-  <h1>BabyFoot Manager</h1>
-
-  <div id="main-container">
-    <!-- Games Section -->
-    <div id="games-section">
-      <div id="input-container">
-        <form>
-          <input id="game-name" type="text" placeholder="Enter game name" />
-          <button id="add-game-btn">Add Game</button>
-        </form>
-        <p id="unfinished-counter"></p>
+  <div>
+    <h1>BabyFoot Manager</h1>
+    <div id="main-container">
+      <!-- Games Section -->
+      <div id="games-section">
+        <div id="input-container">
+          <form method="get" id="game-form">
+            <input type="text" id="player1" placeholder="Joueur 1" class="player-name" />
+            <label id="vs-text">VS</label>
+            <input type="text" id="player2" placeholder="Joueur 1" class="player-name" />
+            <button type="sybmit" id="add-game-btn">Ajouter</button>
+          </form>
+        </div>
+        <div id="games-container">
+          <h2 id="parties">Les Parties<br /></h2>
+          <P id="unfinished-counter">Counter</P>
+        </div>
+        <div id="games-list-container">
+          <ul id="games-list">
+            <!-- Games will be dynamically added here -->
+          </ul>
+        </div>
       </div>
-
-      <div id="games-container">
-        <h2>Babyfoot games</h2>
-        <ul id="games-list">
-          <!-- Games will be dynamically added here -->
-        </ul>
-      </div>
-    </div>
-
-    <!-- Chat Section -->
-    <div id="chat-section">
-      <h2>Tchat</h2>
-      <!-- Chat Header -->
-      <div id="chat-header">
-        <form>
-          <input id="user-name" type="text" placeholder="Enter your name" />
-          <button id="set-name-btn">Set Name</button>
-        </form>
-      </div>
-
-      <!-- Chat History -->
-      <div id="chat-history">
-        <!-- Chat messages will be dynamically added here -->
-      </div>
-
-      <!-- Chat Input -->
-      <div id="chat-input">
-        <form id="chat-form">
-          <input id="chat-message" type="text" placeholder="Type your message" />
-          <button type="submit">Send</button>
-        </form>
+      <!-- Resizable Slider -->
+      <div id="slider"></div><!-- Chat Section -->
+      <div id="chat-section">
+        <h2 id="tchat-text">Tchat</h2><!-- Chat Header -->
+        <div id="chat-header">
+          <form method="get" id="name-form">
+            <input type="text" id="user-name" placeholder="Entrer votre nom" />
+            <button type="button" id="set-name-btn">Set Name</button>
+          </form>
+        </div>
+        <!-- Chat History -->
+        <div id="chat-history">
+          <!-- Chat messages will be dynamically added here -->
+        </div>
+        <!-- Chat Input -->
+        <div id="chat-input">
+          <form method="get" id="chat-form">
+            <input type="text" id="chat-message" placeholder="Écrire un message" />
+            <button type="submit" id="button-chat">Send</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 

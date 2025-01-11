@@ -1,15 +1,24 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
-  padding: 0;
-  display: flex;
+  margin: 0;
+  padding: 0px;
   flex-direction: column;
   align-items: center;
+  background-color: rgb(243, 244, 246);
+  color: rgb(51, 51, 51);
 }
 
 h1 {
-  color: #333;
+  color: rgb(51, 51, 51);
   text-align: center;
-  margin: 20px 0;
+  margin-top: 20px;
+  margin-right: 0px;
+  margin-bottom: 20px;
+  margin-left: 0px;
 }
 
 .list-item,
@@ -20,37 +29,27 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 5px;
+  background-color: rgb(255, 255, 255);
 }
 
 #games-list {
+  height: auto;
   width: 100%;
-  max-width: 500px;
   list-style-type: none;
-  padding: 0;
-}
-
-#games-list li {
-  background-color: #fff;
-}
-
-.game-item {
-  background-color: #f9f9f9;
-}
-
-.game-status {
-  font-size: 0.9em;
-  color: #888;
-}
-
-.status-toggle {
-  margin-right: 10px;
-  cursor: pointer;
+  padding: 20px 10px 10px;
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: #ffffff;
+  align-items: center;
+  min-height: 100px;
+  max-width: 600px;
 }
 
 .game-item span {
   flex-grow: 1;
 }
+
 
 .delete-button {
   background: none;
@@ -69,119 +68,221 @@ h1 {
   height: 16px;
 }
 
-/* Input and Button Styles (Used by both game input and chat input) */
-#game-name,
+.player-name,
 #user-name,
 #chat-message {
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid rgb(204, 204, 204);
   border-radius: 5px;
 }
 
-#game-name,
+.player-name {
+  width: auto;
+  position: static;
+  border: 0px;
+}
+
 #user-name {
-  max-width: 100%;
+  margin: 1px 20px 1px 1px;
 }
 
-#game-name {
-  width: 250px;
-}
-
-.action-button,
 #add-game-btn,
-#chat-form button,
-#set-name-btn {
+#set-name-btn,
+#chat-form button {
   padding: 10px 20px;
   font-size: 16px;
-  color: #fff;
-  background-color: #007bff;
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 123, 255);
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-#add-game-btn {
-  margin-left: 10px;
-}
-
-.action-button:hover,
 #add-game-btn:hover,
+#set-name-btn:hover,
 #chat-form button:hover {
-  background-color: #0056b3;
+  background-color: rgb(0, 86, 179);
 }
 
-/* Container Styles */
-#games-container,
-#input-container {
+#add-game-btn {
+  margin-left: 20px;
+}
+
+#games-container {
+  height: 0px;
+  width: 0px;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  flex-direction: column;
+  align-items: center;
 }
 
 #main-container {
   display: flex;
   width: 100%;
-  height: calc(100vh - 100px);
+  height: 100vh;
+  max-height: calc(100vh - 100px);
 }
 
 #games-section {
-  flex: 7;
-  padding: 20px;
-  border-right: 1px solid #ccc;
   overflow-y: auto;
+  margin: 10px;
+  min-width: 600px;
+  flex-grow: 7;
+  flex-shrink: 1;
+  flex-basis: 0%;
 }
 
 #chat-section {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+  min-width: 350px;
+  overflow-y: auto;
+  margin: 10px;
+  flex-grow: 3;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  min-width: 350px;
 }
 
-/* Media Query for smaller screens (e.g., phones) */
-@media (max-width: 768px) {
-
-  /* Adjust 768px as needed */
-  #main-container {
-    flex-direction: column;
-    /* Stack the sections vertically */
-    height: auto;
-    /* Allow content to determine height */
-  }
-
-  #games-section {
-    flex: 1;
-    /* Take up available space */
-    border-right: none;
-    /* Remove right border */
-    border-bottom: 1px solid #ccc;
-    /* Add bottom border to separate sections */
-  }
-
-  #chat-section {
-    flex: 1;
-    /* Take up available space */
-  }
+#slider {
+  width: 5px;
+  background-color: gray;
+  cursor: col-resize;
+  margin: 0 10px;
 }
 
 #chat-header {
-  margin-bottom: 10px;
+  display: flex;
+  align-items: stretch;
+  margin: 1px 1px 10px 1px;
 }
 
 #chat-history {
-  min-height: 300px;
-  max-height: 100%;
+  height: 100%;
+  max-height: calc(100vh - 350px);
   flex-grow: 1;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 10px;
   padding: 10px;
+  background-color: rgb(219, 219, 219);
+  background-clip: border-box;
   margin-bottom: 10px;
-  background: #f9f9f9;
-  border-radius: 5px;
 }
 
 #chat-form {
   display: flex;
-  gap: 10px;
+  row-gap: 10px;
+  column-gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+#game-form {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-content: space-between;
+}
+
+#input-container {
+  min-height: 100px;
+  flex-direction: row;
+  align-content: flex-start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#vs-text {
+  content: VS;
+  position: static;
+  margin: 1px 10px;
+}
+
+
+#tchat-text {
+  text-align: center;
+  font-size: 29px;
+}
+
+#chat-input {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+#unfinished-counter {
+  padding: 10px;
+  position: relative;
+  bottom: 95px;
+  left: 250px;
+  width: 80px;
+  height: 40px;
+  font-size: 16px;
+  border: 3px solid;
+  border-radius: 20px;
+  background-color: #ceeaff;
+  text-align: center;
+}
+
+#parties {
+  position: relative;
+  bottom: 25px;
+  right: 175px;
+  width: 200px;
+  height: 40px;
+  padding: 1px 1px 1px 6px;
+  border: 3px solid;
+  border-radius: 20px;
+  background-color: #ceeaff;
+}
+
+#name-form {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+#button-chat {
+  padding: 1px 15px 1px 1px;
+}
+
+#games-list-container {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  #main-container {
+    flex-direction: column;
+  }
+
+  #slider {
+    display: none;
+  }
+
+  #games-section {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    width: 100%;
+    height: auto;
+    max-height: 50%;
+  }
+
+  #chat-section {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    width: 100%;
+    height: 100vh;
+    max-height: 48%;
+    padding-right: 20px;
+    padding-bottom: 20px;
+  }
 }
