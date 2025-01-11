@@ -42,15 +42,15 @@ app.get('/games', async (req, res) => {
 
 // Create a new game
 app.post('/games', async (req, res) => {
-  const { name } = req.body;
-  if (!name) {
-    return res.status(400).json({ error: 'Game name is required' });
+  const { player1, player2 } = req.body;
+  if (!player1 || !player2) {
+    return res.status(400).json({ error: 'Nom des joueurs manquant' });
   }
 
   try {
     const { rows } = await pool.query(
-      'INSERT INTO games (name, is_finished) VALUES ($1, $2) RETURNING *',
-      [name, false]
+      'INSERT INTO games (player1, player2, is_finished) VALUES ($1, $2, $3) RETURNING *',
+      [player1, player2, false]
     );
     const newGame = rows[0];
 
@@ -114,20 +114,22 @@ wss.on('connection', (ws) => {
   console.log('WebSocket connection established.');
 
   ws.on('message', async (message) => {
+    console.log("message:\n");
+    console.log(JSON.parse(message));
     try {
       const data = JSON.parse(message);
 
       switch (data.type) {
         case 'create': {
-          const { name } = data;
-          if (!name) {
-            ws.send(JSON.stringify({ error: 'Game name is required' }));
+          const { player1, player2 } = data;
+          if (!player1 || !player2) {
+            ws.send(JSON.stringify({ error: 'Nom des joueurs manquant' }));
             return;
           }
 
           const { rows } = await pool.query(
-            'INSERT INTO games (name, is_finished) VALUES ($1, $2) RETURNING *',
-            [name, false]
+            'INSERT INTO games (player1, player2, is_finished) VALUES ($1, $2, $3) RETURNING *',
+            [player1, player2, false]
           );
           const newGame = rows[0];
           broadcastToClients({ type: 'gameCreated', game: newGame });

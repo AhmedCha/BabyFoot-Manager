@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS games (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    player1 VARCHAR(255) NOT NULL,
+    player2 VARCHAR(255) NOT NULL,
     is_finished BOOLEAN DEFAULT FALSE
 );
 

@@ -1,18 +1,40 @@
+const slider = document.getElementById("slider");
+const gamesSection = document.getElementById("games-section");
+const chatSection = document.getElementById("chat-section");
 const socket = new WebSocket('ws://localhost:3000');
 const gamesList = document.getElementById('games-list');
-const gameNameInput = document.getElementById('game-name');
+const player1Input = document.getElementById('player1');
+const player2Input = document.getElementById('player2');
 const addGameBtn = document.getElementById('add-game-btn');
 const userNameInput = document.getElementById('user-name');
 const chatHistory = document.getElementById('chat-history');
 const chatForm = document.getElementById('chat-form');
 const chatMessageInput = document.getElementById('chat-message');
+let isDragging = false;
 let unfinishedGameCount = 0;
 let currentUserName = null;
 let currentUserId = null;
 
 
+
+slider.addEventListener("mousedown", () => {
+	document.onmousemove = (event) => {
+	  const containerWidth = slider.parentElement.offsetWidth;
+	  const newGamesWidth = (event.clientX / containerWidth) * 100;
+  
+	  gamesSection.style.flex = `${newGamesWidth} 0 0`;
+	  chatSection.style.flex = `${100 - newGamesWidth} 0 0`;
+	};
+  
+	document.onmouseup = () => {
+	  document.onmousemove = null;
+	  document.onmouseup = null;
+	};
+  });
+
+
 // Display a game in the list
-function displayGame({ id, name, is_finished }) {
+function displayGame({ id, player1, player2, is_finished }) {
 	const li = document.createElement('li');
 	li.classList.add('game-item');
 	li.dataset.id = id;
@@ -20,7 +42,7 @@ function displayGame({ id, name, is_finished }) {
 
 	li.innerHTML = `
         <input type="checkbox" class="status-toggle" ${is_finished ? 'checked' : ''} />
-        <span>${name}</span>
+        <span>${player1} VS ${player2}</span>
         <button class="delete-button">
             <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -42,7 +64,7 @@ function updateUnfinishedCounter() {
 		(gameItem) => !gameItem.classList.contains('finished')
 	).length;
 
-	document.getElementById('unfinished-counter').textContent = `Unfinished Games: ${unfinishedGames}`;
+	document.getElementById('unfinished-counter').textContent = unfinishedGames;
 }
 
 // Update the styling for a game item
@@ -81,26 +103,6 @@ function displayChatMessage({ id, name, message }) {
 	chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the newest message
 }
 
-
-// Send a chat message
-function sendChatMessage() {
-	const name = userNameInput.value.trim();
-	const message = chatMessageInput.value.trim();
-
-	if (!name) {
-		alert('Please enter your name!');
-		return;
-	}
-
-	if (!message) {
-		return; // Do nothing if the message is empty
-	}
-
-	// Send message to WebSocket server
-	socket.send(JSON.stringify({ type: 'chatMessage', name, message, id: currentUserId }));
-	chatMessageInput.value = ''; // Clear the input field
-}
-
 // Handle WebSocket messages
 socket.onmessage = ({ data }) => {
 	const parsedData = JSON.parse(data);
@@ -134,10 +136,18 @@ socket.onmessage = ({ data }) => {
 // Add a new game
 addGameBtn.addEventListener('click', (event) => {
 	event.preventDefault();
-	const name = gameNameInput.value.trim();
-	if (name) {
-		socket.send(JSON.stringify({ type: 'create', name }));
-		gameNameInput.value = '';
+	const player1 = player1Input.value.trim();
+	const player2 = player2Input.value.trim();
+	console.log(player1);
+	console.log(player2);
+	if (!player1Input || !player2Input){
+		alert('Please enter a game name!');
+		return;
+	}
+	if (player1Input && player1Input) {
+		socket.send(JSON.stringify({ type: 'create', player1, player2 }));
+		player1Input.value = '';
+		player2Input.value = '';
 	} else {
 		alert('Please enter a game name!');
 	}
@@ -146,7 +156,20 @@ addGameBtn.addEventListener('click', (event) => {
 // Send a chat message
 chatForm.addEventListener('submit', (e) => {
 	e.preventDefault();
-	sendChatMessage();
+	const name = userNameInput.value.trim();
+	const message = chatMessageInput.value.trim();
+
+	if (!name) {
+		alert('Veuillez saisir votre nom !');
+		return;
+	}
+
+	if (!message) {
+		return;
+	}
+
+	socket.send(JSON.stringify({ type: 'chatMessage', name, message, id: currentUserId }));
+	chatMessageInput.value = ''; 
 });
 
 // Set username
@@ -154,7 +177,7 @@ document.getElementById('set-name-btn').addEventListener('click', () => {
 	const name = userNameInput.value.trim();
 
 	if (!name) {
-		alert('Please enter a valid name!');
+		alert('Le champ du nom ne peut pas être vide!');
 		return;
 	}
 
