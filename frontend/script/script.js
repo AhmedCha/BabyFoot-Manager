@@ -15,23 +15,20 @@ let unfinishedGameCount = 0;
 let currentUserName = null;
 let currentUserId = null;
 
-
-
 slider.addEventListener("mousedown", () => {
 	document.onmousemove = (event) => {
-	  const containerWidth = slider.parentElement.offsetWidth;
-	  const newGamesWidth = (event.clientX / containerWidth) * 100;
-  
-	  gamesSection.style.flex = `${newGamesWidth} 0 0`;
-	  chatSection.style.flex = `${100 - newGamesWidth} 0 0`;
-	};
-  
-	document.onmouseup = () => {
-	  document.onmousemove = null;
-	  document.onmouseup = null;
-	};
-  });
+		const containerWidth = slider.parentElement.offsetWidth;
+		const newGamesWidth = (event.clientX / containerWidth) * 100;
 
+		gamesSection.style.flex = `${newGamesWidth} 0 0`;
+		chatSection.style.flex = `${100 - newGamesWidth} 0 0`;
+	};
+
+	document.onmouseup = () => {
+		document.onmousemove = null;
+		document.onmouseup = null;
+	};
+});
 
 // Display a game in the list
 function displayGame({ id, player1, player2, is_finished }) {
@@ -41,7 +38,7 @@ function displayGame({ id, player1, player2, is_finished }) {
 	updateGameStyles(li, is_finished);
 
 	li.innerHTML = `
-        <input type="checkbox" class="status-toggle" ${is_finished ? 'checked' : ''} />
+        <input type="checkbox" class="status-toggle" ${is_finished ? 'checked disabled' : ''} />
         <span>${player1} VS ${player2}</span>
         <button class="delete-button">
             <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -49,7 +46,6 @@ function displayGame({ id, player1, player2, is_finished }) {
             </svg>
         </button>
     `;
-
 	li.querySelector('.status-toggle').addEventListener('change', (e) =>
 		updateGame(id, { is_finished: e.target.checked })
 	);
@@ -69,7 +65,7 @@ function updateUnfinishedCounter() {
 
 // Update the styling for a game item
 function updateGameStyles(li, isFinished) {
-	li.classList.toggle('finished', isFinished); // Add/remove 'finished' class
+	li.classList.toggle('finished', isFinished);
 	li.style.color = isFinished ? 'red' : 'black';
 	li.style.textDecoration = isFinished ? 'line-through' : 'none';
 }
@@ -95,12 +91,11 @@ function displayChatMessage({ id, name, message }) {
 	const div = document.createElement('div');
 	div.classList.add('chat-message');
 
-	// Display "Me" if the sender's ID matches the current user's ID
-	const displayName = id === currentUserId ? 'Me' : name;
+	const displayName = id === currentUserId ? 'Moi' : name;
 
 	div.innerHTML = `<strong>${displayName}:</strong> ${message}`;
 	chatHistory.appendChild(div);
-	chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the newest message
+	chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 
 // Handle WebSocket messages
@@ -111,21 +106,22 @@ socket.onmessage = ({ data }) => {
 	switch (type) {
 		case 'gameCreated':
 			displayGame(parsedData.game);
-			updateUnfinishedCounter(); // Recalculate the counter
+			updateUnfinishedCounter();
 			break;
 		case 'gameUpdated': {
 			const gameItem = document.querySelector(`li[data-id="${parsedData.game.id}"]`);
 			if (gameItem) {
 				updateGameStyles(gameItem, parsedData.game.is_finished);
-				updateUnfinishedCounter(); // Recalculate the counter
+				updateUnfinishedCounter();
 				gameItem.querySelector('.status-toggle').checked = parsedData.game.is_finished;
+				gameItem.querySelector('.status-toggle').disabled = parsedData.game.is_finished;
 			}
 			break;
 		}
 		case 'gameDeleted':
 			const gameItem = document.querySelector(`li[data-id="${parsedData.id}"]`);
 			gameItem?.remove();
-			updateUnfinishedCounter(); // Recalculate the counter
+			updateUnfinishedCounter();
 			break;
 		case 'chatMessage':
 			displayChatMessage(parsedData);
@@ -138,18 +134,13 @@ addGameBtn.addEventListener('click', (event) => {
 	event.preventDefault();
 	const player1 = player1Input.value.trim();
 	const player2 = player2Input.value.trim();
-	console.log(player1);
-	console.log(player2);
-	if (!player1Input || !player2Input){
-		alert('Please enter a game name!');
-		return;
-	}
-	if (player1Input && player1Input) {
+	if (player1 && player1) {
 		socket.send(JSON.stringify({ type: 'create', player1, player2 }));
 		player1Input.value = '';
 		player2Input.value = '';
 	} else {
-		alert('Please enter a game name!');
+		alert('Donnez le nom des deux joueurs, s\'il vous plaît!');
+
 	}
 });
 
@@ -169,11 +160,12 @@ chatForm.addEventListener('submit', (e) => {
 	}
 
 	socket.send(JSON.stringify({ type: 'chatMessage', name, message, id: currentUserId }));
-	chatMessageInput.value = ''; 
+	chatMessageInput.value = '';
 });
 
 // Set username
-document.getElementById('set-name-btn').addEventListener('click', () => {
+document.getElementById('set-name-btn').addEventListener('click', (e) => {
+	e.preventDefault();
 	const name = userNameInput.value.trim();
 
 	if (!name) {
@@ -184,13 +176,12 @@ document.getElementById('set-name-btn').addEventListener('click', () => {
 	// Generate a unique ID for this user (UUID-like approach)
 	currentUserId = `${name}-${Date.now()}`;
 
-	// Notify the server of the user's name and ID
 	socket.send(JSON.stringify({ type: 'setName', name, id: currentUserId }));
 
-	currentUserName = name; // Securely set the current user's name
+	currentUserName = name;
 	userNameInput.value = name;
-	userNameInput.disabled = true; // Disable the name input
-	document.getElementById('set-name-btn').disabled = true; // Disable the button
+	userNameInput.disabled = true;
+	document.getElementById('set-name-btn').disabled = true;
 });
 
 
@@ -199,10 +190,6 @@ fetch('http://localhost:3000/games')
 	.then((res) => (res.ok ? res.json() : Promise.reject('Failed to fetch games')))
 	.then((games) => {
 		games.forEach(displayGame);
-		updateUnfinishedCounter(); // Update the counter after displaying all games
+		updateUnfinishedCounter();
 	})
 	.catch((err) => console.error('Error fetching games:', err));
-
-
-
-

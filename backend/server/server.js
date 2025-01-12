@@ -3,8 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const WebSocket = require('ws');
-
-// Initialize Express app
 const app = express();
 
 // PostgreSQL connection setup
@@ -114,8 +112,6 @@ wss.on('connection', (ws) => {
   console.log('WebSocket connection established.');
 
   ws.on('message', async (message) => {
-    console.log("message:\n");
-    console.log(JSON.parse(message));
     try {
       const data = JSON.parse(message);
 
@@ -137,9 +133,8 @@ wss.on('connection', (ws) => {
         }
         case 'chatMessage': {
           const { id, name, message } = data;
-          console.log(data);
           if (!id || !name || !message) {
-            return; // Ignore invalid messages
+            return; 
           }
           broadcastToClients({ type: 'chatMessage', id, name, message });
           break;
