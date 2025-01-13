@@ -1,7 +1,6 @@
 const slider = document.getElementById("slider");
 const gamesSection = document.getElementById("games-section");
 const chatSection = document.getElementById("chat-section");
-const socket = new WebSocket('ws://localhost:3000');
 const gamesList = document.getElementById('games-list');
 const player1Input = document.getElementById('player1');
 const player2Input = document.getElementById('player2');
@@ -14,6 +13,10 @@ let isDragging = false;
 let unfinishedGameCount = 0;
 let currentUserName = null;
 let currentUserId = null;
+
+// Initialise WebSocket
+const ws_url = 'ws://localhost:3000';
+const socket = new WebSocket(ws_url);
 
 slider.addEventListener("mousedown", () => {
 	document.onmousemove = (event) => {

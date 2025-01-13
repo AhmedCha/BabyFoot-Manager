@@ -7,11 +7,11 @@ const app = express();
 
 // PostgreSQL connection setup
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
+  user: '<votre_postgre_username>',
+  host: '<votre_url>',                         // Mettez 'localhaut' pour un serveur local
   database: 'babyfoot_db',
-  password: 'Ahmed*1234',
-  port: 5432,
+  password: '<votre_postgre_mot_de_passe>',
+  port: /*votre_port_postgres*/,               // 5432 par default
 });
 
 // Middleware for JSON parsing and CORS
@@ -134,7 +134,7 @@ wss.on('connection', (ws) => {
         case 'chatMessage': {
           const { id, name, message } = data;
           if (!id || !name || !message) {
-            return; 
+            return;
           }
           broadcastToClients({ type: 'chatMessage', id, name, message });
           break;
