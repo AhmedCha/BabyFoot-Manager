@@ -190,9 +190,27 @@ document.getElementById('set-name-btn').addEventListener('click', (e) => {
 
 // Fetch existing games on page load
 fetch('http://localhost:3000/games')
-	.then((res) => (res.ok ? res.json() : Promise.reject('Failed to fetch games')))
-	.then((games) => {
-		games.forEach(displayGame);
-		updateUnfinishedCounter();
-	})
-	.catch((err) => console.error('Error fetching games:', err));
+  .then((res) => (res.ok ? res.json() : Promise.reject('Failed to fetch games')))
+  .then((games) => {
+    games.forEach(displayGame);
+    updateUnfinishedCounter();
+  })
+  .catch((err) => console.error('Error fetching games:', err));
+
+// Add some visual feedback for connection status
+socket.onopen = () => {
+  console.log('Connected to server');
+  const statusMsg = document.createElement('div');
+  statusMsg.classList.add('system-message');
+  statusMsg.textContent = 'Connecté au serveur';
+  chatHistory.appendChild(statusMsg);
+};
+
+socket.onclose = () => {
+  console.log('Disconnected from server');
+  const statusMsg = document.createElement('div');
+  statusMsg.classList.add('system-message');
+  statusMsg.textContent = 'Déconnecté du serveur';
+  statusMsg.style.color = '#e74c3c';
+  chatHistory.appendChild(statusMsg);
+};
